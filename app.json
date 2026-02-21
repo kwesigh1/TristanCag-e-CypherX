@@ -24,9 +24,6 @@
       "description": "Must begin with 'XPLOADER-BOT:~' or 'CYPHER-X:~'.",
       "required": false
     },
-    "NODE_ENV": {
-      "value": "production"
-    }
   },
 
   "buildpacks": [

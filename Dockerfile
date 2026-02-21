@@ -1,32 +1,25 @@
-FROM node:20-slim
+FROM node:lts
 
-# Install native deps
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ffmpeg \
-    imagemagick \
-    webp \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg imagemagick webp && apt-get clean
 
 # Set working directory
 WORKDIR /app
 
-# Copy only package files first
+# Copy package files
 COPY package*.json ./
 
-# Install ONLY production deps
-RUN npm install --omit=dev \
- && npm cache clean --force
+# Install dependencies
+RUN npm install && npm cache clean --force
 
 # Copy application code
 COPY . .
 
-# Heroku sets PORT automatically
+# Expose port
 EXPOSE 3000
 
-# Environment
-ENV NODE_ENV=production \
-    NODE_OPTIONS="--max-old-space-size=768 --optimize-for-size --gc-interval=100"
+# Set environment
+ENV NODE_ENV production
 
-# Run Node directly
-CMD ["node", "index.js"]
+# Run command
+CMD ["npm", "run", "start"]
